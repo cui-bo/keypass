@@ -2,7 +2,6 @@ package Models
 
 import (
 	"encoding/json"
-	"github.com/cui-bo/keypass/Config"
 	"time"
 )
 
@@ -11,6 +10,7 @@ type User struct {
 	Uuid    	 string `json:"uuid"`
 	Name    	 string `json:"name"`
 	Email   	 string `json:"email"`
+	Password   	 string `json:"password"`
 	Phone   	 string `json:"phone"`
 	Address 	 string `json:"address"`
 	CreationDate time.Time `json:"creation_date"`
@@ -24,6 +24,7 @@ func (u *User) UnmarshalJSON(b []byte) error {
 	aux := struct {
 		Name 		string `json:"name"`
 		Email		string `json:"email"`
+		Password  string `json:"password"`
 		Phone		string `json:"phone"`
 		Address		string `json:"address"`
 	}{}
@@ -33,6 +34,7 @@ func (u *User) UnmarshalJSON(b []byte) error {
 
 	u.Name = aux.Name
 	u.Email = aux.Email
+	u.Password = aux.Password
 	u.Phone = aux.Phone
 	u.Address = aux.Address
 
@@ -45,52 +47,19 @@ func (u User) MarshalJSON() ([]byte, error) {
 		Uuid			string		`json:"uuid"`
 		Name			string		`json:"name"`
 		Email			string		`json:"email"`
+		Password		string		`json:"password"`
 		Phone			string		`json:"phone"`
 		Address			string		`json:"address"`
-		CreationDate	time.Time `json:"creation_date"`
+		CreationDate	time.Time 	`json:"creation_date"`
 	}{
 		Id:				u.Id,
 		Uuid:           u.Uuid,
 		Name:			u.Name,
 		Email:			u.Email,
+		Password:		u.Password,
 		Phone:			u.Phone,
 		Address:        u.Address,
 		CreationDate:	u.CreationDate,
 	}
 	return json.Marshal(aux)
-}
-
-func GetAllUsers(users *[]User) (err error) {
-	if err = Config.DB.Find(users).Error; err != nil {
-		return err
-	}
-	return nil
-}
-
-func CreateUser(user *User) (err error) {
-	if err = Config.DB.Create(user).Error; err != nil {
-		return err;
-	}
-	return nil
-}
-
-func GetUserById(user *User, id string) (err error) {
-	if err = Config.DB.Where("id=?", id).First(user).Error; err != nil {
-		return err
-	}
-	return nil
-}
-
-func UpdateUser(user *User, id string) (err error) {
-	if err = Config.DB.Save(user).Error; err != nil {
-		return err
-	}
-	return nil
-}
-
-func DeleteUser(user *User, id string) (err error) {
-	if err = Config.DB.Where("id=?", id).Delete(user).Error; err != nil {
-		return err
-	}
-	return nil
 }

@@ -2,10 +2,13 @@ package Controllers
 
 import (
 	"github.com/cui-bo/keypass/Models"
+	"github.com/cui-bo/keypass/Services"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	uuid "github.com/satori/go.uuid"
 	"log"
 	"net/http"
+	"time"
 )
 
 // @Description get all users
@@ -17,7 +20,7 @@ import (
 func GetUsers(ctx *gin.Context) {
 	var users []Models.User
 
-	err := Models.GetAllUsers(&users)
+	err := Services.GetAllUsers(&users)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusNotFound)
 	} else {
@@ -34,8 +37,23 @@ func GetUsers(ctx *gin.Context) {
 // @Router /user [post]
 func CreateUser(ctx *gin.Context) {
 	var user Models.User
+	// uuid
+	u := uuid.NewV4().String()
+	user.Uuid = u
+	// date
+	d := time.Now()
+	user.CreationDate = d
+
 	ctx.BindJSON(&user)
-	err := Models.CreateUser(&user)
+
+	errs := Services.ValidatePayload(&user)
+	if len(errs) != 0 {
+		log.Println("/users bad request", errs)
+		ctx.JSON(http.StatusBadRequest, errs)
+		return
+	}
+
+	err := Services.CreateUser(&user)
 	if err != nil {
 		log.Println("/users bad request", err.Error())
 		ctx.AbortWithStatus(http.StatusNotFound)
@@ -47,15 +65,15 @@ func CreateUser(ctx *gin.Context) {
 // @Description get user by id
 // @Accept json
 // @Produce json
-// @Param uuid path string true "Some ID"
+// @Param id path string "Some ID"
 // @Success 200 {object} Models.User "ok"
 // @Failure 400 {string} string "We need ID!!"
 // @Failure 404 {string} string "Can not find ID"
-// @Router /user/{uuid} [get]
+// @Router /user/{id} [get]
 func GetUserById(ctx *gin.Context) {
 	userId := ctx.Params.ByName("id")
 	var user Models.User
-	err := Models.GetUserById(&user, userId)
+	err := Services.GetUserById(&user, userId)
 	if err != nil {
 		log.Println("/users bad request", err.Error())
 		ctx.AbortWithStatus(http.StatusNotFound)
@@ -69,14 +87,14 @@ func UpdateUser(ctx *gin.Context) {
 	var user Models.User
 
 	// Check if user exist
-	err := Models.GetUserById(&user, userId)
+	err := Services.GetUserById(&user, userId)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, user)
 	}
 
 	ctx.BindJSON(&user)
 
-	err = Models.UpdateUser(&user, userId)
+	err = Services.UpdateUser(&user, userId)
 	if err != nil {
 		log.Println("/users bad request", err.Error())
 		ctx.AbortWithStatus(http.StatusNotFound)
@@ -90,14 +108,14 @@ func DeleteUser(ctx *gin.Context) {
 	var user Models.User
 
 	// Check if user exist
-	err := Models.GetUserById(&user, userId)
+	err := Services.GetUserById(&user, userId)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, user)
 	}
 
 	ctx.BindJSON(&user)
 
-	err = Models.DeleteUser(&user, userId)
+	err = Services.DeleteUser(&user, userId)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusNotFound)
 	} else {
