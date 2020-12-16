@@ -1,33 +1,19 @@
-basePath: /v1
 definitions:
-  model.User:
+  Models.User:
     properties:
-      creation_date:
+      address:
         type: string
       email:
         type: string
-      first_name:
+      id:
+        type: integer
+      name:
         type: string
-      last_name:
-        type: string
-      password:
-        type: string
-      uuid:
+      phone:
         type: string
     type: object
-host: localhost:9090
 info:
-  contact:
-    email: support@swagger.io
-    name: API Support
-    url: http://www.swagger.io/support
-  description: This is an API for creating hash in order to create keypasses.
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: http://swagger.io/terms/
-  title: Swagger For Keypass API
-  version: "1.0"
+  contact: {}
 paths:
   /users:
     post:
@@ -40,14 +26,14 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/model.User'
+          $ref: '#/definitions/Models.User'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.User'
+            $ref: '#/definitions/Models.User'
         "400":
           description: Bad Request
           schema:
@@ -56,7 +42,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: get a User by ID
+      description: get user by id
       parameters:
       - description: Some ID
         in: path
@@ -69,7 +55,7 @@ paths:
         "200":
           description: ok
           schema:
-            $ref: '#/definitions/model.User'
+            $ref: '#/definitions/Models.User'
         "400":
           description: We need ID!!
           schema:

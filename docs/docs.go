@@ -18,16 +18,7 @@ var doc = `{
     "info": {
         "description": "{{.Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
-        "contact": {
-            "name": "API Support",
-            "url": "http://www.swagger.io/support",
-            "email": "support@swagger.io"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
+        "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -49,7 +40,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/definitions/Models.User"
                         }
                     }
                 ],
@@ -57,7 +48,7 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/definitions/Models.User"
                         }
                     },
                     "400": {
@@ -71,7 +62,7 @@ var doc = `{
         },
         "/users/{uuid}": {
             "get": {
-                "description": "get a User by ID",
+                "description": "get user by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -91,7 +82,7 @@ var doc = `{
                     "200": {
                         "description": "ok",
                         "schema": {
-                            "$ref": "#/definitions/model.User"
+                            "$ref": "#/definitions/Models.User"
                         }
                     },
                     "400": {
@@ -111,25 +102,22 @@ var doc = `{
         }
     },
     "definitions": {
-        "model.User": {
+        "Models.User": {
             "type": "object",
             "properties": {
-                "creation_date": {
+                "address": {
                     "type": "string"
                 },
                 "email": {
                     "type": "string"
                 },
-                "first_name": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 },
-                "last_name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "uuid": {
+                "phone": {
                     "type": "string"
                 }
             }
@@ -148,12 +136,12 @@ type swaggerInfo struct {
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
-	Version:     "1.0",
-	Host:        "localhost:9090",
-	BasePath:    "/v1",
+	Version:     "",
+	Host:        "",
+	BasePath:    "",
 	Schemes:     []string{},
-	Title:       "Swagger For Keypass API",
-	Description: "This is an API for creating hash in order to create keypasses.",
+	Title:       "",
+	Description: "",
 }
 
 type s struct{}
