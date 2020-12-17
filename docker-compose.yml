@@ -1,0 +1,23 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: keypass
+      MYSQL_USER: keypassdb
+      MYSQL_PASSWORD: pass
+    ports:
+      - 3306:3306
+    
+  api:
+    image: keypass-api:v0.0.1
+    restart: always
+    ports:
+      - 9090:9090
+    depends_on:
+      - db

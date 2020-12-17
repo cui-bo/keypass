@@ -1,11 +1,16 @@
-package Config
+package config
 
 import (
 	"fmt"
+	"github.com/cui-bo/keypass/models"
 	"github.com/jinzhu/gorm"
 )
 
 var DB *gorm.DB
+
+type BDD interface {
+	DBUser
+}
 
 type DBConfig struct {
 	Host     string
@@ -35,4 +40,13 @@ func DbURL(config *DBConfig) string {
 		config.Port,
 		config.DBName,
 	)
+}
+
+type DBUser interface {
+	CreateUser(u *models.User) (*models.User, error)
+	GetUser(uuid string) (*models.User, error)
+	GetUserByEmail(email string) (*models.User, error)
+	DeleteUser(uuid string) (*models.User, error)
+	UpdateUser(uuid string, payload *models.Payload) (*models.User, error)
+	GetAllUser() ([]*models.User, error)
 }

@@ -1,10 +1,23 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "This is an API for creating hash in order to create keypass.",
+        "title": "Swagger For Keypass API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
     },
+    "basePath": "/v1",
     "paths": {
-        "/users": {
+        "/user": {
             "post": {
                 "description": "create a User from the payload.",
                 "consumes": [
@@ -20,7 +33,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/Models.User"
+                            "$ref": "#/definitions/models.User"
                         }
                     }
                 ],
@@ -28,7 +41,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/Models.User"
+                            "$ref": "#/definitions/models.User"
                         }
                     },
                     "400": {
@@ -40,7 +53,7 @@
                 }
             }
         },
-        "/users/{uuid}": {
+        "/user/{id}": {
             "get": {
                 "description": "get user by id",
                 "consumes": [
@@ -49,20 +62,11 @@
                 "produces": [
                     "application/json"
                 ],
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Some ID",
-                        "name": "uuid",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "ok",
                         "schema": {
-                            "$ref": "#/definitions/Models.User"
+                            "$ref": "#/definitions/models.User"
                         }
                     },
                     "400": {
@@ -79,13 +83,35 @@
                     }
                 }
             }
+        },
+        "/users": {
+            "get": {
+                "description": "get all users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "Models.User": {
+        "models.User": {
             "type": "object",
             "properties": {
                 "address": {
+                    "type": "string"
+                },
+                "creation_date": {
                     "type": "string"
                 },
                 "email": {
@@ -97,7 +123,13 @@
                 "name": {
                     "type": "string"
                 },
+                "password": {
+                    "type": "string"
+                },
                 "phone": {
+                    "type": "string"
+                },
+                "uuid": {
                     "type": "string"
                 }
             }

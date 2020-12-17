@@ -1,7 +1,10 @@
+basePath: /v1
 definitions:
-  Models.User:
+  models.User:
     properties:
       address:
+        type: string
+      creation_date:
         type: string
       email:
         type: string
@@ -9,13 +12,27 @@ definitions:
         type: integer
       name:
         type: string
+      password:
+        type: string
       phone:
+        type: string
+      uuid:
         type: string
     type: object
 info:
-  contact: {}
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is an API for creating hash in order to create keypass.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger For Keypass API
+  version: "1.0"
 paths:
-  /users:
+  /user:
     post:
       consumes:
       - application/json
@@ -26,36 +43,30 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/Models.User'
+          $ref: '#/definitions/models.User'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/Models.User'
+            $ref: '#/definitions/models.User'
         "400":
           description: Bad Request
           schema:
             type: string
-  /users/{uuid}:
+  /user/{id}:
     get:
       consumes:
       - application/json
       description: get user by id
-      parameters:
-      - description: Some ID
-        in: path
-        name: uuid
-        required: true
-        type: string
       produces:
       - application/json
       responses:
         "200":
           description: ok
           schema:
-            $ref: '#/definitions/Models.User'
+            $ref: '#/definitions/models.User'
         "400":
           description: We need ID!!
           schema:
@@ -64,4 +75,16 @@ paths:
           description: Can not find ID
           schema:
             type: string
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/models.User'
 swagger: "2.0"

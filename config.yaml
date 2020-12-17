@@ -1,0 +1,4 @@
+model: "local"
+port : "9091"
+mysql:
+  dsn: "root:laposte@tcp(127.0.0.1:3306)/formation_go?charset=utf8mb4&parseTime=True&loc=Local"
